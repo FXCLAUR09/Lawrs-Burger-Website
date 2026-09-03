@@ -657,6 +657,10 @@ p {
 .identity {
     min-height: 1200px;
 
+    /* Performance: allow the browser to skip off-screen painting/layout. */
+    content-visibility: auto;
+    contain-intrinsic-size: 1200px;
+
     padding: 90px 4.2% 35px;
 
     background:
@@ -665,7 +669,7 @@ p {
             rgba(0, 0, 0, 0.68),
             rgba(0, 0, 0, 0.8)
         ),
-        url("../assets/about-burger.jpg") center / cover fixed no-repeat;
+        url("../assets/about-burger.jpg") center / cover no-repeat;
 }
 
 .identity-intro {
@@ -3589,15 +3593,12 @@ p {
     height: 100%;
     object-fit: cover;
 
-    transition:
-        transform 0.4s ease,
-        filter 0.4s ease;
+    transition: transform 0.28s ease;
 }
 
 /* Image zooms when mouse is over it */
 .gallery-card:hover img {
-    transform: scale(1.12);
-    filter: brightness(1.08);
+    transform: scale(1.06);
 }
 
 /* =========================================================
@@ -5474,4 +5475,298 @@ body .add-cart-btn span {
         font-size: 26px;
     }
 
+}
+/* =====================================================
+   USER ACCOUNT MENU
+   ===================================================== */
+
+.user-menu {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+
+/* USER BUTTON */
+
+.user-menu-button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.06);
+
+    color: #fff;
+
+    padding: 9px 13px;
+
+    border-radius: 999px;
+
+    font-family: "DM Sans", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.user-menu-button:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.45);
+
+    transform: translateY(-1px);
+}
+
+
+/* USER ICON */
+
+.user-icon {
+    width: 28px;
+    height: 28px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #d99a32;
+
+    border-radius: 50%;
+
+    font-size: 15px;
+}
+
+
+/* USER NAME */
+
+.user-name {
+    max-width: 120px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* ARROW */
+
+.user-arrow {
+    font-size: 12px;
+
+    transition: transform 0.2s ease;
+}
+
+
+/* DROPDOWN */
+
+.user-dropdown {
+    position: absolute;
+
+    top: calc(100% + 12px);
+    right: 0;
+
+    width: 245px;
+
+    background: #181818;
+
+    border: 1px solid rgba(255, 255, 255, 0.12);
+
+    border-radius: 14px;
+
+    padding: 10px;
+
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.45);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transform: translateY(-8px);
+
+    transition:
+        opacity 0.2s ease,
+        visibility 0.2s ease,
+        transform 0.2s ease;
+
+    z-index: 9999;
+}
+
+
+/* SHOW DROPDOWN */
+
+.user-menu.active .user-dropdown {
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: translateY(0);
+}
+
+.user-menu.active .user-arrow {
+    transform: rotate(180deg);
+}
+
+
+/* DROPDOWN HEADER */
+
+.user-dropdown-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 11px;
+
+    padding: 10px 9px 12px;
+}
+
+.user-dropdown-icon {
+    width: 38px;
+    height: 38px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #d99a32;
+
+    border-radius: 50%;
+
+    font-size: 18px;
+}
+
+.user-dropdown-header strong {
+    display: block;
+
+    color: #fff;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: 14px;
+
+    margin-bottom: 2px;
+}
+
+.user-dropdown-header small {
+    display: block;
+
+    color: rgba(255, 255, 255, 0.55);
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: 11px;
+
+    max-width: 160px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* DIVIDER */
+
+.user-dropdown-divider {
+    height: 1px;
+
+    background: rgba(255, 255, 255, 0.1);
+
+    margin: 2px 4px 6px;
+}
+
+
+/* DROPDOWN LINKS */
+
+.user-dropdown a {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    width: 100%;
+
+    padding: 11px 10px;
+
+    border-radius: 9px;
+
+    color: rgba(255, 255, 255, 0.85);
+
+    text-decoration: none;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.user-dropdown a span {
+    width: 22px;
+
+    text-align: center;
+
+    font-size: 15px;
+}
+
+.user-dropdown a:hover {
+    background: rgba(255, 255, 255, 0.08);
+
+    color: #fff;
+}
+
+
+/* LOGOUT */
+
+.user-dropdown .logout-link {
+    color: #e6a14a;
+}
+
+.user-dropdown .logout-link:hover {
+    background: rgba(217, 154, 50, 0.12);
+
+    color: #f2b45c;
+}
+
+
+/* NOT LOGGED IN LOGIN BUTTON */
+
+.user-login-link {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #fff;
+
+    text-decoration: none;
+
+    font-family: "DM Sans", sans-serif;
+
+    font-size: 13px;
+
+    font-weight: 700;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.user-login-link:hover {
+    color: #d99a32;
+
+    transform: translateY(-1px);
+}
+
+.user-login-icon {
+    font-size: 17px;
 }
