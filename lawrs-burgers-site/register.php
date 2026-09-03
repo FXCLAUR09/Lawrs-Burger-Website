@@ -1,12 +1,15 @@
 <?php
 
 session_start();
+
 require_once "config/db.php";
 
 $error = "";
+
 $success = "";
 
 $name = "";
+
 $email = "";
 
 /*
@@ -27,6 +30,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $error = "Please fill in all fields.";
 
     /*
+     * Validate name using Regex.
+     *
+     * Allows letters, spaces, periods,
+     * apostrophes, and hyphens.
+     */
+    } elseif (!preg_match("/^[a-zA-Z .'-]+$/", $name)) {
+
+        $error = "Name can only contain letters, spaces, periods, apostrophes, and hyphens.";
+
+    /*
      * Validate email.
      */
     } elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -41,6 +54,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         $error = "Password must be at least 6 characters long.";
 
     /*
+     * Check maximum password length.
+     */
+    } elseif (strlen($password) > 255) {
+
+        $error = "Password is too long.";
+
+    /*
      * Check password confirmation.
      */
     } elseif ($password !== $confirm_password) {
@@ -52,6 +72,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         /*
          * Check if email already exists.
          */
+
         $stmt = $conn->prepare("
             SELECT id
             FROM customers
@@ -63,7 +84,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             $stmt->bind_param("s", $email);
             $stmt->execute();
-
             $result = $stmt->get_result();
 
             if ($result->num_rows > 0) {
@@ -114,7 +134,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                     } else {
 
                         $error = "Something went wrong while creating your account. Please try again.";
-
                     }
 
                     $insert->close();
@@ -122,7 +141,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 } else {
 
                     $error = "Unable to create your account. Please try again.";
-
                 }
             }
 
@@ -131,7 +149,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         } else {
 
             $error = "Unable to process registration. Please try again.";
-
         }
     }
 }
@@ -141,6 +158,7 @@ $conn->close();
 ?>
 
 <!DOCTYPE html>
+
 <html lang="en">
 
 <head>
@@ -160,7 +178,11 @@ $conn->close();
     <title>Create Account | Lawr's Burgers</title>
 
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
+
+    <link
+        rel="preconnect"
+        href="https://fonts.googleapis.com"
+    >
 
     <link
         rel="preconnect"
@@ -174,7 +196,11 @@ $conn->close();
     >
 
     <!-- Main Website CSS -->
-    <link rel="stylesheet" href="css/style.css">
+
+    <link
+        rel="stylesheet"
+        href="css/style.css"
+    >
 
     <style>
 
@@ -183,10 +209,13 @@ $conn->close();
          */
 
         .register-page {
+
             min-height: 100vh;
 
             display: flex;
+
             align-items: center;
+
             justify-content: center;
 
             padding: 40px 20px;
@@ -199,13 +228,18 @@ $conn->close();
                 url("assets/about-burger.jpg");
 
             background-size: cover;
+
             background-position: center;
+
             background-attachment: fixed;
         }
 
 
+
         .register-card {
+
             width: 100%;
+
             max-width: 480px;
 
             background: #fffaf0;
@@ -219,11 +253,13 @@ $conn->close();
         }
 
 
+
         /*
          * BRAND
          */
 
         .register-brand {
+
             text-align: center;
 
             padding: 30px 25px 24px;
@@ -232,10 +268,13 @@ $conn->close();
         }
 
 
+
         .register-brand .brand-main {
+
             font-family: "Bebas Neue", sans-serif;
 
             font-size: 52px;
+
             line-height: 0.85;
 
             color: #ff9100;
@@ -244,10 +283,13 @@ $conn->close();
         }
 
 
+
         .register-brand .brand-sub {
+
             font-family: "Bebas Neue", sans-serif;
 
             font-size: 25px;
+
             line-height: 1;
 
             color: #ffffff;
@@ -256,12 +298,15 @@ $conn->close();
         }
 
 
+
         .customer-label {
+
             margin: 12px 0 0;
 
             font-family: "DM Sans", sans-serif;
 
             font-size: 12px;
+
             font-weight: 700;
 
             letter-spacing: 2px;
@@ -270,16 +315,20 @@ $conn->close();
         }
 
 
+
         /*
          * CONTENT
          */
 
         .register-content {
+
             padding: 32px 35px 30px;
         }
 
 
+
         .register-content h1 {
+
             margin: 0;
 
             font-family: "Bebas Neue", sans-serif;
@@ -294,7 +343,9 @@ $conn->close();
         }
 
 
+
         .register-description {
+
             margin: 8px 0 25px;
 
             font-family: "DM Sans", sans-serif;
@@ -307,11 +358,13 @@ $conn->close();
         }
 
 
+
         /*
          * ERROR / SUCCESS
          */
 
         .register-error {
+
             margin-bottom: 20px;
 
             padding: 12px 14px;
@@ -332,7 +385,9 @@ $conn->close();
         }
 
 
+
         .register-success {
+
             margin-bottom: 20px;
 
             padding: 12px 14px;
@@ -353,16 +408,20 @@ $conn->close();
         }
 
 
+
         /*
          * FORM
          */
 
         .register-form-group {
+
             margin-bottom: 18px;
         }
 
 
+
         .register-form-group label {
+
             display: block;
 
             margin-bottom: 7px;
@@ -377,7 +436,9 @@ $conn->close();
         }
 
 
+
         .register-form-group input {
+
             width: 100%;
 
             box-sizing: border-box;
@@ -404,7 +465,9 @@ $conn->close();
         }
 
 
+
         .register-form-group input:focus {
+
             border-color: #ff9100;
 
             box-shadow:
@@ -412,12 +475,16 @@ $conn->close();
         }
 
 
+
         .register-form-group input::placeholder {
+
             color: #999;
         }
 
 
+
         .password-note {
+
             margin-top: 6px;
 
             font-family: "DM Sans", sans-serif;
@@ -428,11 +495,13 @@ $conn->close();
         }
 
 
+
         /*
          * BUTTON
          */
 
         .register-button {
+
             width: 100%;
 
             margin-top: 5px;
@@ -462,7 +531,9 @@ $conn->close();
         }
 
 
+
         .register-button:hover {
+
             background: #e67f00;
 
             transform: translateY(-2px);
@@ -472,9 +543,12 @@ $conn->close();
         }
 
 
+
         .register-button:active {
+
             transform: translateY(0);
         }
+
 
 
         /*
@@ -482,6 +556,7 @@ $conn->close();
          */
 
         .register-footer {
+
             padding: 18px 25px 25px;
 
             text-align: center;
@@ -490,7 +565,9 @@ $conn->close();
         }
 
 
+
         .register-footer p {
+
             margin: 0 0 10px;
 
             font-family: "DM Sans", sans-serif;
@@ -501,7 +578,9 @@ $conn->close();
         }
 
 
+
         .register-footer a {
+
             font-family: "DM Sans", sans-serif;
 
             font-size: 13px;
@@ -516,12 +595,16 @@ $conn->close();
         }
 
 
+
         .register-footer a:hover {
+
             color: #ff9100;
         }
 
 
+
         .back-website {
+
             display: inline-block;
 
             margin-top: 5px;
@@ -532,9 +615,12 @@ $conn->close();
         }
 
 
+
         .back-website:hover {
+
             color: #ff9100 !important;
         }
+
 
 
         /*
@@ -544,38 +630,51 @@ $conn->close();
         @media (max-width: 600px) {
 
             .register-page {
+
                 padding: 20px 14px;
 
                 background-attachment: scroll;
             }
 
 
+
             .register-card {
+
                 max-width: 100%;
             }
 
 
+
             .register-brand {
+
                 padding: 25px 20px 20px;
             }
 
 
+
             .register-brand .brand-main {
+
                 font-size: 46px;
             }
 
 
+
             .register-brand .brand-sub {
+
                 font-size: 22px;
             }
 
 
+
             .register-content {
+
                 padding: 28px 24px 25px;
             }
 
 
+
             .register-content h1 {
+
                 font-size: 34px;
             }
 
@@ -586,6 +685,7 @@ $conn->close();
 </head>
 
 
+
 <body>
 
     <div class="register-page">
@@ -593,23 +693,31 @@ $conn->close();
         <div class="register-card">
 
 
+
             <!-- BRAND -->
 
             <div class="register-brand">
 
                 <div class="brand-main">
+
                     LAWR'S
+
                 </div>
 
                 <div class="brand-sub">
+
                     BURGERS
+
                 </div>
 
                 <p class="customer-label">
+
                     CUSTOMER ACCOUNT
+
                 </p>
 
             </div>
+
 
 
             <!-- CONTENT -->
@@ -617,12 +725,17 @@ $conn->close();
             <div class="register-content">
 
                 <h1>
+
                     CREATE ACCOUNT
+
                 </h1>
 
                 <p class="register-description">
+
                     Join Lawr's Burgers and make ordering your favorite burgers easier.
+
                 </p>
+
 
 
                 <!-- ERROR -->
@@ -632,12 +745,15 @@ $conn->close();
                     <div class="register-error">
 
                         <?php
+
                         echo htmlspecialchars($error);
+
                         ?>
 
                     </div>
 
                 <?php endif; ?>
+
 
 
                 <!-- SUCCESS -->
@@ -647,7 +763,9 @@ $conn->close();
                     <div class="register-success">
 
                         <?php
+
                         echo htmlspecialchars($success);
+
                         ?>
 
                     </div>
@@ -655,13 +773,19 @@ $conn->close();
                 <?php endif; ?>
 
 
+
                 <!-- REGISTRATION FORM -->
 
                 <form
+
                     method="POST"
+
                     action=""
+
                     autocomplete="on"
+
                 >
+
 
 
                     <!-- NAME -->
@@ -669,21 +793,33 @@ $conn->close();
                     <div class="register-form-group">
 
                         <label for="name">
+
                             Full Name
+
                         </label>
 
                         <input
+
                             type="text"
+
                             id="name"
+
                             name="name"
+
                             placeholder="Enter your full name"
+
                             value="<?php echo htmlspecialchars($name); ?>"
+
                             autocomplete="name"
+
                             maxlength="100"
+
                             required
+
                         >
 
                     </div>
+
 
 
                     <!-- EMAIL -->
@@ -691,21 +827,33 @@ $conn->close();
                     <div class="register-form-group">
 
                         <label for="email">
+
                             Email Address
+
                         </label>
 
                         <input
+
                             type="email"
+
                             id="email"
+
                             name="email"
+
                             placeholder="Enter your email"
+
                             value="<?php echo htmlspecialchars($email); ?>"
+
                             autocomplete="email"
+
                             maxlength="150"
+
                             required
+
                         >
 
                     </div>
+
 
 
                     <!-- PASSWORD -->
@@ -713,24 +861,37 @@ $conn->close();
                     <div class="register-form-group">
 
                         <label for="password">
+
                             Password
+
                         </label>
 
                         <input
+
                             type="password"
+
                             id="password"
+
                             name="password"
+
                             placeholder="Create a password"
+
                             autocomplete="new-password"
+
                             minlength="6"
+
                             required
+
                         >
 
                         <div class="password-note">
+
                             Password must be at least 6 characters.
+
                         </div>
 
                     </div>
+
 
 
                     <!-- CONFIRM PASSWORD -->
@@ -738,30 +899,47 @@ $conn->close();
                     <div class="register-form-group">
 
                         <label for="confirm_password">
+
                             Confirm Password
+
                         </label>
 
                         <input
+
                             type="password"
+
                             id="confirm_password"
+
                             name="confirm_password"
+
                             placeholder="Confirm your password"
+
                             autocomplete="new-password"
+
                             minlength="6"
+
                             required
+
                         >
 
                     </div>
 
 
+
                     <!-- SUBMIT -->
 
                     <button
+
                         type="submit"
+
                         class="register-button"
+
                     >
+
                         CREATE ACCOUNT
+
                     </button>
+
 
 
                 </form>
@@ -769,25 +947,37 @@ $conn->close();
             </div>
 
 
+
             <!-- FOOTER -->
 
             <div class="register-footer">
 
                 <p>
+
                     Already have an account?
+
                     <a href="login.php">
+
                         Login here
+
                     </a>
+
                 </p>
 
                 <a
+
                     href="index.php"
+
                     class="back-website"
+
                 >
+
                     ← Back to Website
+
                 </a>
 
             </div>
+
 
 
         </div>
@@ -797,3 +987,4 @@ $conn->close();
 </body>
 
 </html>
+```

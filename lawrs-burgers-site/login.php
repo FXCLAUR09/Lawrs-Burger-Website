@@ -1,3 +1,4 @@
+```php
 <?php
 
 session_start();
@@ -36,9 +37,62 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $login = trim($_POST["login"] ?? "");
     $password = $_POST["password"] ?? "";
 
+    /*
+     * =====================================================
+     * BASIC VALIDATION
+     * =====================================================
+     */
+
     if ($login === "" || $password === "") {
 
         $error = "Please enter your username/email and password.";
+
+    /*
+     * Check maximum login length.
+     */
+    } elseif (strlen($login) > 100) {
+
+        $error = "Username or email is too long.";
+
+    /*
+     * Check maximum password length.
+     */
+    } elseif (strlen($password) > 255) {
+
+        $error = "Invalid username/email or password.";
+
+    /*
+     * =====================================================
+     * EMAIL VALIDATION
+     * =====================================================
+     *
+     * If the login contains "@", treat it as an email.
+     * filter_var() checks whether it is a valid email format.
+     */
+    } elseif (
+        strpos($login, "@") !== false &&
+        !filter_var($login, FILTER_VALIDATE_EMAIL)
+    ) {
+
+        $error = "Please enter a valid email address.";
+
+    /*
+     * =====================================================
+     * USERNAME REGEX VALIDATION
+     * =====================================================
+     *
+     * Admin usernames can contain:
+     * - letters
+     * - numbers
+     * - underscore
+     * - hyphen
+     */
+    } elseif (
+        strpos($login, "@") === false &&
+        !preg_match("/^[a-zA-Z0-9_-]+$/", $login)
+    ) {
+
+        $error = "Username contains invalid characters.";
 
     } else {
 
@@ -157,15 +211,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 $_SESSION["admin_username"]
                             );
 
+                            /*
+                             * Create customer session.
+                             */
                             $_SESSION["customer_id"] = $customer["id"];
                             $_SESSION["customer_name"] = $customer["name"];
                             $_SESSION["customer_email"] = $customer["email"];
 
                             /*
-                            |--------------------------------------------------------------------------
-                            | Load this customer's own cart
-                            |--------------------------------------------------------------------------
-                            */
+                             * =================================================
+                             * LOAD THIS CUSTOMER'S OWN CART
+                             * =================================================
+                             */
 
                             if (!isset($_SESSION["customer_carts"])) {
                                 $_SESSION["customer_carts"] = array();
@@ -173,56 +230,74 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                             $customer_id = (int)$customer["id"];
 
-                            if (isset($_SESSION["customer_carts"][$customer_id])) {
+                            if (
+                                isset(
+                                    $_SESSION["customer_carts"][$customer_id]
+                                )
+                            ) {
 
-                                $_SESSION["cart"] = $_SESSION["customer_carts"][$customer_id];
+                                $_SESSION["cart"] =
+                                    $_SESSION["customer_carts"][$customer_id];
 
                             } else {
 
                                 $_SESSION["cart"] = array();
+
                             }
 
                             /*
-|--------------------------------------------------------------------------
-| Return Customer To Previous Page
-|--------------------------------------------------------------------------
-*/
+                             * =================================================
+                             * RETURN CUSTOMER TO PREVIOUS PAGE
+                             * =================================================
+                             */
 
-$redirect_after_login =
-    $_SESSION["redirect_after_login"] ?? "index.php";
+                            $redirect_after_login =
+                                $_SESSION["redirect_after_login"] ?? "index.php";
 
-/*
- * Remove the saved redirect so it doesn't
- * affect future logins.
- */
-unset($_SESSION["redirect_after_login"]);
+                            /*
+                             * Remove the saved redirect so it doesn't
+                             * affect future logins.
+                             */
+                            unset($_SESSION["redirect_after_login"]);
 
-/*
- * Only allow local PHP pages.
- * This prevents unwanted external redirects.
- */
-$allowed_redirects = array(
-    "index.php",
-    "checkout.php",
-    "cart.php"
-);
+                            /*
+                             * Only allow local PHP pages.
+                             * This prevents unwanted external redirects.
+                             */
+                            $allowed_redirects = array(
+                                "index.php",
+                                "checkout.php",
+                                "cart.php"
+                            );
 
-if (!in_array($redirect_after_login, $allowed_redirects, true)) {
-    $redirect_after_login = "index.php";
-}
+                            if (
+                                !in_array(
+                                    $redirect_after_login,
+                                    $allowed_redirects,
+                                    true
+                                )
+                            ) {
 
-header("Location: " . $redirect_after_login);
-exit;
+                                $redirect_after_login = "index.php";
+
+                            }
+
+                            header(
+                                "Location: " . $redirect_after_login
+                            );
+                            exit;
 
                         } else {
 
-                            $error = "Invalid username/email or password.";
+                            $error =
+                                "Invalid username/email or password.";
 
                         }
 
                     } else {
 
-                        $error = "Invalid username/email or password.";
+                        $error =
+                            "Invalid username/email or password.";
 
                     }
 
@@ -230,7 +305,8 @@ exit;
 
                 } else {
 
-                    $error = "Unable to process login. Please try again.";
+                    $error =
+                        "Unable to process login. Please try again.";
 
                 }
 
@@ -238,7 +314,8 @@ exit;
 
         } else {
 
-            $error = "Unable to process login. Please try again.";
+            $error =
+                "Unable to process login. Please try again.";
 
         }
     }
@@ -272,7 +349,7 @@ $conn->close();
 
     <link
         rel="preconnect"
-        href="https://fonts.gstatic.com"
+        href="https://fonts.googleapis.com"
         crossorigin
     >
 
@@ -286,13 +363,11 @@ $conn->close();
 
 </head>
 
-
 <body>
 
     <div class="login-page">
 
         <div class="login-card">
-
 
             <!-- BRAND -->
 
@@ -333,7 +408,11 @@ $conn->close();
                     <div class="login-error">
 
                         <?php
-                        echo htmlspecialchars($error);
+                        echo htmlspecialchars(
+                            $error,
+                            ENT_QUOTES,
+                            "UTF-8"
+                        );
                         ?>
 
                     </div>
@@ -347,7 +426,6 @@ $conn->close();
                     method="POST"
                     action=""
                 >
-
 
                     <!-- USERNAME / EMAIL -->
 
@@ -363,6 +441,14 @@ $conn->close();
                             name="login"
                             placeholder="Enter username or email"
                             autocomplete="username"
+                            maxlength="100"
+                            value="<?php
+                                echo htmlspecialchars(
+                                    $login ?? "",
+                                    ENT_QUOTES,
+                                    "UTF-8"
+                                );
+                            ?>"
                             required
                         >
 
@@ -383,6 +469,7 @@ $conn->close();
                             name="password"
                             placeholder="Enter password"
                             autocomplete="current-password"
+                            maxlength="255"
                             required
                         >
 
@@ -398,9 +485,7 @@ $conn->close();
                         LOGIN
                     </button>
 
-
                 </form>
-
 
             </div>
 
@@ -413,11 +498,17 @@ $conn->close();
                     Don't have an account?
                 </p>
 
-                <a href="register.php" class="register-link">
+                <a
+                    href="register.php"
+                    class="register-link"
+                >
                     CREATE AN ACCOUNT
                 </a>
 
-                <a href="index.php" class="back-link">
+                <a
+                    href="index.php"
+                    class="back-link"
+                >
                     ← Back to Website
                 </a>
 
@@ -430,3 +521,4 @@ $conn->close();
 </body>
 
 </html>
+```
