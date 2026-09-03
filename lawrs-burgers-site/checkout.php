@@ -2,6 +2,28 @@
 
 session_start();
 
+/*
+|--------------------------------------------------------------------------
+| Require Customer Login Before Checkout
+|--------------------------------------------------------------------------
+|
+| Guests are not allowed to access the checkout page.
+| Send them to login.php first.
+|
+*/
+
+if (!isset($_SESSION["customer_id"])) {
+
+    /*
+     * Remember that the customer was trying to checkout.
+     * After successful login, they will be returned here.
+     */
+    $_SESSION["redirect_after_login"] = "checkout.php";
+
+    header("Location: login.php");
+    exit;
+}
+
 require_once "config/db.php";
 
 /*

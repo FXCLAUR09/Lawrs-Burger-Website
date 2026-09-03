@@ -1,4 +1,8 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once "config/db.php";
 
 $sql = "SELECT id, name, description, price, image
@@ -54,19 +58,175 @@ $result = $conn->query($sql);
 
         </button>
 
-       <nav class="main-nav" aria-label="Primary navigation">
+      <nav class="main-nav" aria-label="Primary navigation">
+
     <a href="#home">HOME</a>
-    <a href="View_menu.php">OUR MENU</a>
+
+    <a href="view_menu.php">OUR MENU</a>
+
     <a href="#about">ABOUT US</a>
+
     <a href="#identity">GALLERY</a>
+
     <a href="reviews.php">REVIEWS</a>
+
     <a href="#contact">CONTACT</a>
 
-    <a href="cart.php">VIEW CART 🛒</a>
+    <a href="cart.php">VIEW CART</a>
 
-    <a class="nav-cta" href="view_menu.php">
-        ORDER NOW <span>→</span>
-    </a>
+
+    <!-- USER ACCOUNT -->
+
+    <?php if (isset($_SESSION["customer_id"])): ?>
+
+        <!-- CUSTOMER LOGGED IN -->
+
+        <div class="user-menu">
+
+            <button
+                type="button"
+                class="user-menu-button"
+                aria-expanded="false"
+            >
+
+                <span class="user-icon">👤</span>
+
+                <span class="user-name">
+                    <?php
+                    echo htmlspecialchars($_SESSION["customer_name"]);
+                    ?>
+                </span>
+
+                <span class="user-arrow">▾</span>
+
+            </button>
+
+
+            <div class="user-dropdown">
+
+                <div class="user-dropdown-header">
+
+                    <span class="user-dropdown-icon">👤</span>
+
+                    <div>
+
+                        <strong>
+                            <?php
+                            echo htmlspecialchars($_SESSION["customer_name"]);
+                            ?>
+                        </strong>
+
+                        <small>
+                            <?php
+                            echo htmlspecialchars($_SESSION["customer_email"]);
+                            ?>
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="user-dropdown-divider"></div>
+
+
+                <a href="cart.php">
+                    <span>📦</span>
+                    My Orders
+                </a>
+
+
+                <a href="logout.php" class="logout-link">
+                    <span>↪</span>
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+
+    <?php elseif (isset($_SESSION["admin_id"])): ?>
+
+        <!-- ADMIN LOGGED IN -->
+
+        <div class="user-menu">
+
+            <button
+                type="button"
+                class="user-menu-button"
+                aria-expanded="false"
+            >
+
+                <span class="user-icon">👤</span>
+
+                <span class="user-name">
+                    <?php
+                    echo htmlspecialchars($_SESSION["admin_username"]);
+                    ?>
+                </span>
+
+                <span class="user-arrow">▾</span>
+
+            </button>
+
+
+            <div class="user-dropdown">
+
+                <div class="user-dropdown-header">
+
+                    <span class="user-dropdown-icon">👤</span>
+
+                    <div>
+
+                        <strong>
+                            <?php
+                            echo htmlspecialchars($_SESSION["admin_username"]);
+                            ?>
+                        </strong>
+
+                        <small>
+                            Administrator
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="user-dropdown-divider"></div>
+
+
+                <a href="admin/dashboard.php">
+                    <span>⚙</span>
+                    Admin Dashboard
+                </a>
+
+
+                <a href="logout.php" class="logout-link">
+                    <span>↪</span>
+                    Logout
+                </a>
+
+            </div>
+
+        </div>
+
+
+    <?php else: ?>
+
+        <!-- NOT LOGGED IN -->
+
+        <a href="login.php" class="user-login-link">
+
+            <span class="user-login-icon">👤</span>
+
+            <span>LOGIN</span>
+
+        </a>
+
+    <?php endif; ?>
+
 </nav>
 
     </header>
@@ -380,25 +540,25 @@ $result = $conn->query($sql);
                     <div class="gallery-card">
                         <img
                             src="assets/packaging-box-alt.png"
-                            alt="Lawr's burger packaging">
+                            loading="lazy" decoding="async" alt="Lawr's burger packaging">
                     </div>
 
                     <div class="gallery-card">
                         <img
                             src="assets/packaging-stack.png"
-                            alt="Stacked Lawr's burger boxes">
+                            loading="lazy" decoding="async" alt="Stacked Lawr's burger boxes">
                     </div>
 
                     <div class="gallery-card">
                         <img
                             src="assets/packaging-diamond.png"
-                            alt="Lawr's burger box">
+                            loading="lazy" decoding="async" alt="Lawr's burger box">
                     </div>
 
                     <div class="gallery-card">
                         <img
                             src="assets/packaging-box.png"
-                            alt="Lawr's premium burger box">
+                            loading="lazy" decoding="async" alt="Lawr's premium burger box">
                     </div>
 
                 </div>
@@ -423,25 +583,25 @@ $result = $conn->query($sql);
                     <div class="gallery-card">
                         <img
                             src="assets/apparel-shirt.png"
-                            alt="Lawr's burger shirt">
+                            loading="lazy" decoding="async" alt="Lawr's burger shirt">
                     </div>
 
                     <div class="gallery-card">
                         <img
                             src="assets/apparel-hoodie.png"
-                            alt="Lawr's burger hoodie">
+                            loading="lazy" decoding="async" alt="Lawr's burger hoodie">
                     </div>
 
                     <div class="gallery-card">
                         <img
                             src="assets/apparel-apron.png"
-                            alt="Lawr's burger apron">
+                            loading="lazy" decoding="async" alt="Lawr's burger apron">
                     </div>
 
                     <div class="gallery-card">
                         <img
                             src="assets/apparel-hat.png"
-                            alt="Lawr's burger bucket hat">
+                            loading="lazy" decoding="async" alt="Lawr's burger bucket hat">
                     </div>
 
                 </div>
@@ -466,25 +626,25 @@ $result = $conn->query($sql);
                     <div class="gallery-card">
                         <img
                             src="assets/drinkware-cup.png"
-                            alt="Lawr's burger cup">
+                            loading="lazy" decoding="async" alt="Lawr's burger cup">
                     </div>
 
                     <div class="gallery-card">
                         <img
                             src="assets/drinkware-bag.png"
-                            alt="Lawr's burger coffee carrier">
+                            loading="lazy" decoding="async" alt="Lawr's burger coffee carrier">
                     </div>
 
                     <div class="gallery-card">
                         <img
                             src="assets/drinkware-coffee.png"
-                            alt="Lawr's burger coffee cup">
+                            loading="lazy" decoding="async" alt="Lawr's burger coffee cup">
                     </div>
 
                     <div class="gallery-card">
                         <img
                             src="assets/identity-building.png"
-                            alt="Lawr's burger identity building">
+                            loading="lazy" decoding="async" alt="Lawr's burger identity building">
                     </div>
 
                 </div>
@@ -512,25 +672,25 @@ $result = $conn->query($sql);
                     <div class="gallery-card">
                         <img
                             src="assets/delivery-backpack.png"
-                            alt="Lawr's delivery backpack">
+                            loading="lazy" decoding="async" alt="Lawr's delivery backpack">
                     </div>
 
                     <div class="gallery-card">
                         <img
                             src="assets/identity-card.png"
-                            alt="Lawr's identity card">
+                            loading="lazy" decoding="async" alt="Lawr's identity card">
                     </div>
 
                     <div class="gallery-card">
                         <img
                             src="assets/delivery-tote.png"
-                            alt="Lawr's delivery tote">
+                            loading="lazy" decoding="async" alt="Lawr's delivery tote">
                     </div>
 
                     <div class="gallery-card">
                         <img
                             src="assets/identity-poster.png"
-                            alt="Lawr's burger identity poster">
+                            loading="lazy" decoding="async" alt="Lawr's burger identity poster">
                     </div>
 
                 </div>
@@ -554,7 +714,7 @@ $result = $conn->query($sql);
             </a>
 
             <p class="footer-slogan">
-                GOOD BURGERS.<br>
+                <br><br>GOOD BURGERS.<br>
                 GOOD MOOD.
             </p>
 
@@ -680,5 +840,83 @@ $result = $conn->query($sql);
 </footer>
     <script src="js/script.js"></script>
 
+    <script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const userMenus = document.querySelectorAll(".user-menu");
+
+    userMenus.forEach(function (menu) {
+
+        const button = menu.querySelector(".user-menu-button");
+
+        if (!button) {
+            return;
+        }
+
+        button.addEventListener("click", function (event) {
+
+            event.stopPropagation();
+
+            const isOpen = menu.classList.contains("active");
+
+            // Close other user menus
+            userMenus.forEach(function (otherMenu) {
+
+                otherMenu.classList.remove("active");
+
+                const otherButton =
+                    otherMenu.querySelector(".user-menu-button");
+
+                if (otherButton) {
+                    otherButton.setAttribute(
+                        "aria-expanded",
+                        "false"
+                    );
+                }
+
+            });
+
+            // Open clicked menu
+            if (!isOpen) {
+
+                menu.classList.add("active");
+
+                button.setAttribute(
+                    "aria-expanded",
+                    "true"
+                );
+
+            }
+
+        });
+
+    });
+
+
+    // Close when clicking outside
+    document.addEventListener("click", function () {
+
+        userMenus.forEach(function (menu) {
+
+            menu.classList.remove("active");
+
+            const button =
+                menu.querySelector(".user-menu-button");
+
+            if (button) {
+
+                button.setAttribute(
+                    "aria-expanded",
+                    "false"
+                );
+
+            }
+
+        });
+
+    });
+
+});
+</script>
 </body>
 </html>

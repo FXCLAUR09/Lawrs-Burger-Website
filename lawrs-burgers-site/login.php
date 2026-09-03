@@ -182,8 +182,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                                 $_SESSION["cart"] = array();
                             }
 
-                            header("Location: index.php");
-                            exit;
+                            /*
+|--------------------------------------------------------------------------
+| Return Customer To Previous Page
+|--------------------------------------------------------------------------
+*/
+
+$redirect_after_login =
+    $_SESSION["redirect_after_login"] ?? "index.php";
+
+/*
+ * Remove the saved redirect so it doesn't
+ * affect future logins.
+ */
+unset($_SESSION["redirect_after_login"]);
+
+/*
+ * Only allow local PHP pages.
+ * This prevents unwanted external redirects.
+ */
+$allowed_redirects = array(
+    "index.php",
+    "checkout.php",
+    "cart.php"
+);
+
+if (!in_array($redirect_after_login, $allowed_redirects, true)) {
+    $redirect_after_login = "index.php";
+}
+
+header("Location: " . $redirect_after_login);
+exit;
 
                         } else {
 

@@ -100,7 +100,7 @@ if (!$result) {
             VIEW CART 🛒
         </a>
 
-        <a href="view_menu.php" class="nav-cta">
+        <a href="cart.php" class="nav-cta">
             ORDER NOW
             <span>→</span>
         </a>

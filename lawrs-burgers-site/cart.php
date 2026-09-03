@@ -99,13 +99,7 @@ foreach ($cart as $item) {
     <a href="reviews.php">REVIEWS</a>
     <a href="#contact">CONTACT</a>
 
-    <a href="cart.php">VIEW CART 🛒</a>
-
     <?php if (isset($_SESSION['admin_id'])): ?>
-
-        <a href="admin/dashboard.php">
-            ADMIN PANEL
-        </a>
 
         <a href="logout.php">
             LOGOUT
