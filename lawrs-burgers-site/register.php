@@ -5,11 +5,9 @@ session_start();
 require_once "config/db.php";
 
 $error = "";
-
 $success = "";
 
 $name = "";
-
 $email = "";
 
 /*
@@ -187,7 +185,6 @@ $conn->close();
     <link
         rel="preconnect"
         href="https://fonts.gstatic.com"
-        crossorigin
     >
 
     <link
@@ -205,130 +202,162 @@ $conn->close();
     <style>
 
         /*
-         * REGISTER PAGE
+         * ==========================================================
+         * LAWR'S BURGERS - REGISTER PAGE
+         * Glassmorphism design matching login.php
+         * ==========================================================
+         */
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: "DM Sans", sans-serif;
+        }
+
+
+        /*
+         * ==========================================================
+         * PAGE BACKGROUND
+         * ==========================================================
          */
 
         .register-page {
+            position: relative;
 
             min-height: 100vh;
 
             display: flex;
-
             align-items: center;
-
             justify-content: center;
 
-            padding: 40px 20px;
+            padding: 50px 20px;
 
             background:
                 linear-gradient(
                     rgba(0, 0, 0, 0.72),
-                    rgba(0, 0, 0, 0.72)
+                    rgba(0, 0, 0, 0.82)
                 ),
                 url("assets/about-burger.jpg");
 
             background-size: cover;
-
             background-position: center;
-
             background-attachment: fixed;
+
+            overflow-y: auto;
         }
-
-
-
-        .register-card {
-
-            width: 100%;
-
-            max-width: 480px;
-
-            background: #fffaf0;
-
-            border-radius: 18px;
-
-            overflow: hidden;
-
-            box-shadow:
-                0 20px 60px rgba(0, 0, 0, 0.35);
-        }
-
 
 
         /*
+         * ==========================================================
+         * GLASS CARD
+         * ==========================================================
+         */
+
+        .register-card {
+            position: relative;
+
+            width: 100%;
+            max-width: 460px;
+
+            background: rgba(255, 255, 255, 0.10);
+
+            border: 1px solid rgba(255, 255, 255, 0.20);
+
+            border-radius: 20px;
+
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+
+            box-shadow:
+                0 25px 70px rgba(0, 0, 0, 0.55),
+                inset 0 1px 0 rgba(255, 255, 255, 0.10);
+
+            overflow: hidden;
+        }
+
+
+        /*
+         * ==========================================================
          * BRAND
+         * ==========================================================
          */
 
         .register-brand {
-
             text-align: center;
 
-            padding: 30px 25px 24px;
+            padding: 32px 25px 25px;
 
-            background: #111;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.12);
         }
-
-
 
         .register-brand .brand-main {
+            margin: 0;
 
             font-family: "Bebas Neue", sans-serif;
 
-            font-size: 52px;
+            font-size: 62px;
 
-            line-height: 0.85;
+            line-height: 0.82;
 
-            color: #ff9100;
+            color: #ff9700;
 
-            letter-spacing: 2px;
+            letter-spacing: 3px;
+
+            text-shadow:
+                0 4px 15px rgba(255, 151, 0, 0.20);
         }
 
-
-
         .register-brand .brand-sub {
+            margin-top: 5px;
 
             font-family: "Bebas Neue", sans-serif;
 
-            font-size: 25px;
+            font-size: 26px;
 
             line-height: 1;
 
             color: #ffffff;
 
-            letter-spacing: 5px;
+            letter-spacing: 6px;
         }
 
-
-
         .customer-label {
-
-            margin: 12px 0 0;
+            margin: 13px 0 0;
 
             font-family: "DM Sans", sans-serif;
 
-            font-size: 12px;
+            font-size: 11px;
 
             font-weight: 700;
 
-            letter-spacing: 2px;
+            letter-spacing: 2.5px;
 
-            color: #ff9100;
+            color: #ff9700;
+
+            text-transform: uppercase;
         }
-
 
 
         /*
+         * ==========================================================
          * CONTENT
+         * ==========================================================
          */
 
         .register-content {
-
-            padding: 32px 35px 30px;
+            padding: 30px 35px 28px;
         }
 
-
-
         .register-content h1 {
-
             margin: 0;
 
             font-family: "Bebas Neue", sans-serif;
@@ -337,91 +366,95 @@ $conn->close();
 
             line-height: 1;
 
-            color: #111;
+            color: #ffffff;
 
             letter-spacing: 1px;
         }
 
-
-
         .register-description {
-
             margin: 8px 0 25px;
 
             font-family: "DM Sans", sans-serif;
 
             font-size: 14px;
 
-            color: #666;
+            color: rgba(255, 255, 255, 0.70);
 
             line-height: 1.5;
         }
 
 
-
         /*
-         * ERROR / SUCCESS
+         * ==========================================================
+         * ERROR
+         * ==========================================================
          */
 
         .register-error {
-
             margin-bottom: 20px;
 
             padding: 12px 14px;
 
-            border-radius: 8px;
+            border-radius: 10px;
 
-            background: #f8d7da;
+            background: rgba(220, 53, 69, 0.16);
 
-            border: 1px solid #f1aeb5;
+            border: 1px solid rgba(255, 100, 110, 0.35);
 
-            color: #842029;
+            color: #ffb5bb;
 
             font-family: "DM Sans", sans-serif;
 
             font-size: 13px;
 
             line-height: 1.4;
+
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.12);
         }
-
-
-
-        .register-success {
-
-            margin-bottom: 20px;
-
-            padding: 12px 14px;
-
-            border-radius: 8px;
-
-            background: #d1e7dd;
-
-            border: 1px solid #a3cfbb;
-
-            color: #0f5132;
-
-            font-family: "DM Sans", sans-serif;
-
-            font-size: 13px;
-
-            line-height: 1.4;
-        }
-
 
 
         /*
-         * FORM
+         * ==========================================================
+         * SUCCESS
+         * ==========================================================
          */
 
-        .register-form-group {
+        .register-success {
+            margin-bottom: 20px;
 
-            margin-bottom: 18px;
+            padding: 12px 14px;
+
+            border-radius: 10px;
+
+            background: rgba(25, 135, 84, 0.16);
+
+            border: 1px solid rgba(80, 220, 145, 0.30);
+
+            color: #a9f5cc;
+
+            font-family: "DM Sans", sans-serif;
+
+            font-size: 13px;
+
+            line-height: 1.4;
+
+            box-shadow:
+                0 5px 20px rgba(0, 0, 0, 0.12);
         }
 
 
+        /*
+         * ==========================================================
+         * FORM
+         * ==========================================================
+         */
+
+        .register-form-group {
+            margin-bottom: 17px;
+        }
 
         .register-form-group label {
-
             display: block;
 
             margin-bottom: 7px;
@@ -432,26 +465,21 @@ $conn->close();
 
             font-weight: 700;
 
-            color: #222;
+            color: rgba(255, 255, 255, 0.90);
         }
 
-
-
         .register-form-group input {
-
             width: 100%;
-
-            box-sizing: border-box;
 
             padding: 13px 14px;
 
-            border: 1px solid #d6d0c5;
+            border: 1px solid rgba(255, 255, 255, 0.20);
 
-            border-radius: 8px;
+            border-radius: 9px;
 
-            background: #ffffff;
+            background: rgba(0, 0, 0, 0.30);
 
-            color: #222;
+            color: #ffffff;
 
             font-family: "DM Sans", sans-serif;
 
@@ -461,47 +489,65 @@ $conn->close();
 
             transition:
                 border-color 0.2s ease,
-                box-shadow 0.2s ease;
+                background 0.2s ease,
+                box-shadow 0.2s ease,
+                transform 0.2s ease;
         }
 
+        .register-form-group input:hover {
+            background: rgba(0, 0, 0, 0.38);
 
+            border-color: rgba(255, 255, 255, 0.28);
+        }
 
         .register-form-group input:focus {
+            border-color: #ff9700;
 
-            border-color: #ff9100;
+            background: rgba(0, 0, 0, 0.42);
 
             box-shadow:
-                0 0 0 3px rgba(255, 145, 0, 0.15);
+                0 0 0 3px rgba(255, 151, 0, 0.14),
+                0 5px 20px rgba(0, 0, 0, 0.12);
         }
-
-
 
         .register-form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.42);
+        }
 
-            color: #999;
+        .register-form-group input:-webkit-autofill,
+        .register-form-group input:-webkit-autofill:hover,
+        .register-form-group input:-webkit-autofill:focus {
+            -webkit-text-fill-color: #ffffff;
+
+            transition:
+                background-color 9999s ease-in-out 0s;
         }
 
 
+        /*
+         * ==========================================================
+         * PASSWORD NOTE
+         * ==========================================================
+         */
 
         .password-note {
-
             margin-top: 6px;
 
             font-family: "DM Sans", sans-serif;
 
             font-size: 11px;
 
-            color: #777;
+            color: rgba(255, 255, 255, 0.50);
         }
 
 
-
         /*
+         * ==========================================================
          * BUTTON
+         * ==========================================================
          */
 
         .register-button {
-
             width: 100%;
 
             margin-top: 5px;
@@ -510,180 +556,181 @@ $conn->close();
 
             border: none;
 
-            border-radius: 8px;
+            border-radius: 9px;
 
-            background: #ff9100;
+            background: #ff9700;
 
-            color: #111;
+            color: #080808;
 
             font-family: "Bebas Neue", sans-serif;
 
             font-size: 22px;
 
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
 
             cursor: pointer;
 
             transition:
                 transform 0.2s ease,
                 background 0.2s ease,
+                color 0.2s ease,
                 box-shadow 0.2s ease;
         }
 
-
-
         .register-button:hover {
+            background: #ffffff;
 
-            background: #e67f00;
+            color: #111111;
 
             transform: translateY(-2px);
 
             box-shadow:
-                0 8px 18px rgba(255, 145, 0, 0.25);
+                0 10px 25px rgba(0, 0, 0, 0.30);
         }
-
-
 
         .register-button:active {
-
             transform: translateY(0);
-        }
 
+            box-shadow:
+                0 5px 15px rgba(0, 0, 0, 0.20);
+        }
 
 
         /*
+         * ==========================================================
          * FOOTER
+         * ==========================================================
          */
 
         .register-footer {
-
-            padding: 18px 25px 25px;
+            padding: 20px 25px 25px;
 
             text-align: center;
 
-            border-top: 1px solid #e7e0d5;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
         }
 
-
-
         .register-footer p {
-
             margin: 0 0 10px;
 
             font-family: "DM Sans", sans-serif;
 
             font-size: 13px;
 
-            color: #777;
+            color: rgba(255, 255, 255, 0.60);
         }
 
-
-
         .register-footer a {
-
             font-family: "DM Sans", sans-serif;
 
             font-size: 13px;
 
             font-weight: 700;
 
-            color: #8b1e1e;
+            color: #ff9700;
 
             text-decoration: none;
 
-            transition: color 0.2s ease;
+            transition:
+                color 0.2s ease,
+                text-shadow 0.2s ease;
         }
-
-
 
         .register-footer a:hover {
+            color: #ffffff;
 
-            color: #ff9100;
+            text-shadow:
+                0 0 10px rgba(255, 255, 255, 0.30);
         }
 
-
-
         .back-website {
-
             display: inline-block;
 
-            margin-top: 5px;
+            margin-top: 7px;
 
-            color: #555 !important;
+            color: rgba(255, 255, 255, 0.55) !important;
 
             font-weight: 500 !important;
         }
 
-
-
         .back-website:hover {
+            color: #ff9700 !important;
 
-            color: #ff9100 !important;
+            text-shadow: none !important;
         }
 
 
-
         /*
+         * ==========================================================
          * MOBILE
+         * ==========================================================
          */
 
         @media (max-width: 600px) {
 
             .register-page {
-
-                padding: 20px 14px;
+                padding: 25px 14px;
 
                 background-attachment: scroll;
             }
 
-
-
             .register-card {
-
                 max-width: 100%;
+
+                border-radius: 17px;
             }
-
-
 
             .register-brand {
-
-                padding: 25px 20px 20px;
+                padding: 27px 20px 22px;
             }
-
-
 
             .register-brand .brand-main {
-
-                font-size: 46px;
+                font-size: 50px;
             }
-
-
 
             .register-brand .brand-sub {
-
                 font-size: 22px;
+
+                letter-spacing: 5px;
             }
-
-
 
             .register-content {
-
-                padding: 28px 24px 25px;
+                padding: 28px 23px 25px;
             }
 
-
-
             .register-content h1 {
-
                 font-size: 34px;
             }
 
+            .register-description {
+                font-size: 13px;
+            }
+
+            .register-footer {
+                padding: 18px 20px 23px;
+            }
+        }
+
+
+        @media (max-width: 380px) {
+
+            .register-brand .brand-main {
+                font-size: 45px;
+            }
+
+            .register-brand .brand-sub {
+                font-size: 20px;
+            }
+
+            .register-content {
+                padding-left: 19px;
+                padding-right: 19px;
+            }
         }
 
     </style>
 
 </head>
-
 
 
 <body>
@@ -693,31 +740,23 @@ $conn->close();
         <div class="register-card">
 
 
-
             <!-- BRAND -->
 
             <div class="register-brand">
 
                 <div class="brand-main">
-
                     LAWR'S
-
                 </div>
 
                 <div class="brand-sub">
-
                     BURGERS
-
                 </div>
 
                 <p class="customer-label">
-
                     CUSTOMER ACCOUNT
-
                 </p>
 
             </div>
-
 
 
             <!-- CONTENT -->
@@ -725,17 +764,12 @@ $conn->close();
             <div class="register-content">
 
                 <h1>
-
                     CREATE ACCOUNT
-
                 </h1>
 
                 <p class="register-description">
-
                     Join Lawr's Burgers and make ordering your favorite burgers easier.
-
                 </p>
-
 
 
                 <!-- ERROR -->
@@ -745,15 +779,12 @@ $conn->close();
                     <div class="register-error">
 
                         <?php
-
                         echo htmlspecialchars($error);
-
                         ?>
 
                     </div>
 
                 <?php endif; ?>
-
 
 
                 <!-- SUCCESS -->
@@ -763,9 +794,7 @@ $conn->close();
                     <div class="register-success">
 
                         <?php
-
                         echo htmlspecialchars($success);
-
                         ?>
 
                     </div>
@@ -773,19 +802,13 @@ $conn->close();
                 <?php endif; ?>
 
 
-
                 <!-- REGISTRATION FORM -->
 
                 <form
-
                     method="POST"
-
                     action=""
-
                     autocomplete="on"
-
                 >
-
 
 
                     <!-- NAME -->
@@ -793,33 +816,21 @@ $conn->close();
                     <div class="register-form-group">
 
                         <label for="name">
-
                             Full Name
-
                         </label>
 
                         <input
-
                             type="text"
-
                             id="name"
-
                             name="name"
-
                             placeholder="Enter your full name"
-
                             value="<?php echo htmlspecialchars($name); ?>"
-
                             autocomplete="name"
-
                             maxlength="100"
-
                             required
-
                         >
 
                     </div>
-
 
 
                     <!-- EMAIL -->
@@ -827,33 +838,21 @@ $conn->close();
                     <div class="register-form-group">
 
                         <label for="email">
-
                             Email Address
-
                         </label>
 
                         <input
-
                             type="email"
-
                             id="email"
-
                             name="email"
-
                             placeholder="Enter your email"
-
                             value="<?php echo htmlspecialchars($email); ?>"
-
                             autocomplete="email"
-
                             maxlength="150"
-
                             required
-
                         >
 
                     </div>
-
 
 
                     <!-- PASSWORD -->
@@ -861,37 +860,24 @@ $conn->close();
                     <div class="register-form-group">
 
                         <label for="password">
-
                             Password
-
                         </label>
 
                         <input
-
                             type="password"
-
                             id="password"
-
                             name="password"
-
                             placeholder="Create a password"
-
                             autocomplete="new-password"
-
                             minlength="6"
-
                             required
-
                         >
 
                         <div class="password-note">
-
                             Password must be at least 6 characters.
-
                         </div>
 
                     </div>
-
 
 
                     <!-- CONFIRM PASSWORD -->
@@ -899,47 +885,30 @@ $conn->close();
                     <div class="register-form-group">
 
                         <label for="confirm_password">
-
                             Confirm Password
-
                         </label>
 
                         <input
-
                             type="password"
-
                             id="confirm_password"
-
                             name="confirm_password"
-
                             placeholder="Confirm your password"
-
                             autocomplete="new-password"
-
                             minlength="6"
-
                             required
-
                         >
 
                     </div>
 
 
-
                     <!-- SUBMIT -->
 
                     <button
-
                         type="submit"
-
                         class="register-button"
-
                     >
-
                         CREATE ACCOUNT
-
                     </button>
-
 
 
                 </form>
@@ -947,37 +916,26 @@ $conn->close();
             </div>
 
 
-
             <!-- FOOTER -->
 
             <div class="register-footer">
 
                 <p>
-
                     Already have an account?
 
                     <a href="login.php">
-
                         Login here
-
                     </a>
-
                 </p>
 
                 <a
-
                     href="index.php"
-
                     class="back-website"
-
                 >
-
                     ← Back to Website
-
                 </a>
 
             </div>
-
 
 
         </div>
@@ -987,4 +945,3 @@ $conn->close();
 </body>
 
 </html>
-```

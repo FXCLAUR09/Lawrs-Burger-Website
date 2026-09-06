@@ -1,4 +1,3 @@
-```php
 <?php
 
 session_start();
@@ -521,4 +520,3 @@ $conn->close();
 </body>
 
 </html>
-```
